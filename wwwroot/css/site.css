@@ -1,0 +1,96 @@
+:root {
+    --cream: #f4f1de;
+    --coral: #e07a5f;
+    --navy: #3d405b;
+    --sage: #81b29a;
+    --peach: #f2cc8f;
+}
+
+body {
+    background-color: var(--cream);
+    color: var(--navy);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.navbar {
+    background-color: var(--navy) !important;
+    border-bottom: 3px solid var(--sage);
+}
+
+.navbar-brand, .nav-link {
+    color: var(--cream) !important;
+}
+
+.btn-primary {
+    background-color: var(--coral);
+    border-color: var(--coral);
+    color: white;
+}
+
+.btn-primary:hover {
+    background-color: var(--sage)
+}
+
+.btn-secondary {
+    background-color: var(--sage);
+    border-color: var(--sage);
+    color: white;
+}
+
+.card {
+    border: 2px solid var(--navy);
+    border-radius: 8px;
+    margin: 1rem 0;
+}
+
+.table {
+    background-color: white;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+    .table thead {
+        background-color: var(--navy);
+        color: var(--cream);
+    }
+
+.form-control:focus {
+    border-color: var(--sage);
+    box-shadow: 0 0 0 0.2rem rgba(129, 178, 154, 0.25);
+}
+
+a {
+    color: var(--coral);
+    text-decoration: none;
+}
+
+a:hover {
+    color: var(--sage);
+}
+
+.footer {
+    background-color: var(--navy);
+    color: var(--cream);
+    margin-top: auto;
+}
+
+.hero-section {
+    background: linear-gradient(45deg, var(--peach), var(--cream));
+    padding: 4rem 0;
+    border-radius: 0 0 2rem 2rem;
+}
+
+.feature-card {
+    background: white;
+    border: 2px solid var(--sage);
+    border-radius: 1rem;
+    padding: 2rem;
+    margin: 1rem;
+    transition: transform 0.3s ease;
+}
+
+.feature-card:hover {
+    transform: translateY(-5px);
+}
