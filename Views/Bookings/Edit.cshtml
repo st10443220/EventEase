@@ -1,0 +1,51 @@
+﻿@model EventEase.Models.Booking
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<h1 style="color: var(--navy); border-bottom: 2px solid var(--peach); padding-bottom: 0.5rem;">
+    @ViewData["Title"]
+</h1>
+
+<h4>Booking</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="BookingId" />
+            <div class="form-group">
+                <label asp-for="EventId" class="control-label">Event Name</label>
+                <select asp-for="EventId" class="form-control" asp-items="ViewBag.EventId"></select>
+                <span asp-validation-for="EventId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="VenueId" class="control-label">Venue Name</label>
+                <select asp-for="VenueId" class="form-control" asp-items="ViewBag.VenueId"></select>
+                <span asp-validation-for="VenueId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="StartBookingDate" class="control-label">Start Booking Date</label>
+                <input asp-for="StartBookingDate" class="form-control" />
+                <span asp-validation-for="StartBookingDate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="EndBookingDate" class="control-label">End Booking Date</label>
+                <input asp-for="EndBookingDate" class="form-control" />
+                <span asp-validation-for="EndBookingDate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" style="margin-top: 10px" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

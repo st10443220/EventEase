@@ -1,0 +1,55 @@
+﻿@model IEnumerable<EventEase.Models.Venue>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1 style="color: var(--navy); border-bottom: 2px solid var(--peach); padding-bottom: 0.5rem;">
+    @ViewData["Title"]
+</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table table-hover shadow">
+    <thead>
+        <tr>
+            <th>
+                Venue Name
+            </th>
+            <th>
+                Venue Location
+            </th>
+            <th>
+                Venue Capacity
+            </th>
+            <th>
+                Venue Image Url
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.VenueName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.VenueLocation)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.VenueCapacity)
+            </td>
+            <td>
+                    <img src="@Html.DisplayFor(modelItem => item.VenueImageUrl)" />
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.VenueId">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.VenueId">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.VenueId">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

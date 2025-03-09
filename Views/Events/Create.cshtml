@@ -1,0 +1,50 @@
+﻿@model EventEase.Models.Event
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h1 style="color: var(--navy); border-bottom: 2px solid var(--peach); padding-bottom: 0.5rem;">
+    @ViewData["Title"]
+</h1>
+
+<h4>Event</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="EventName" class="control-label">Event Name</label>
+                <input asp-for="EventName" class="form-control" />
+                <span asp-validation-for="EventName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="StartEventDate" class="control-label">Start Event Dates</label>
+                <input asp-for="StartEventDate" class="form-control" type="date" />
+                <span asp-validation-for="StartEventDate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="FinishEventDate" class="control-label">End Event Date</label>
+                <input asp-for="FinishEventDate" class="form-control" type="date" />
+                <span asp-validation-for="FinishEventDate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="EventDescription" class="control-label">Event Description</label>
+                <input asp-for="EventDescription" class="form-control" />
+                <span asp-validation-for="EventDescription" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" style="margin-top: 10px" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

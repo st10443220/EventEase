@@ -1,0 +1,79 @@
+﻿@model EventEase.Models.Booking
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h1 style="color: var(--navy); border-bottom: 2px solid var(--peach); padding-bottom: 0.5rem;">
+    @ViewData["Title"]
+</h1>
+
+<h4>Booking</h4>
+<hr />
+<div class="row">
+    <div class="class=form-card p-4 mt-4" style="background: white; border-radius: 1rem; border: 2px solid var(--sage);" >
+        <!-- Form to handle Event selection -->
+        <form asp-action="Create" method="get">
+            <div class="form-group">
+                <label for="eventId" class="control-label">Select Event</label>
+                <select name="eventId" class="form-control" onchange="this.form.submit()" asp-items="ViewBag.EventId">
+                    <option value="">-- Select an Event --</option>
+                </select>
+            </div>
+        </form>
+
+        <!-- Form to handle Booking creation -->
+        <form asp-action="Create" method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="EventId" class="control-label">Event Name</label>
+                <select asp-for="EventId" class="form-control" asp-items="ViewBag.EventId"></select>
+            </div>
+            <div class="form-group">
+                <label asp-for="VenueId" class="control-label">Venue Name</label>
+                <select asp-for="VenueId" class="form-control" asp-items="ViewBag.VenueId"></select>
+            </div>
+            <div class="form-group">
+                <label asp-for="StartBookingDate" class="control-label">Start Booking Date</label>
+                <input asp-for="StartBookingDate" class="form-control" type="date" />
+                <span asp-validation-for="StartBookingDate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="EndBookingDate" class="control-label">End Booking Date</label>
+                <input asp-for="EndBookingDate" class="form-control" type="date" />
+                <span asp-validation-for="EndBookingDate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" style="margin-top: 10px" />
+            </div>
+        </form>
+    </div>
+    <div class="col-md-4">
+        <h4>Event Details</h4>
+        @if (ViewBag.EventDetails != null)
+        {
+            var eventDetails = ViewBag.EventDetails as EventEase.Models.Event;
+            <div>
+                <p><strong>Event Name:</strong> @eventDetails.EventName</p>
+                <p><strong>Start Date:</strong> @eventDetails.StartEventDate?.ToShortDateString()</p>
+                <p><strong>End Date:</strong> @eventDetails.FinishEventDate?.ToShortDateString()</p>
+                <p><strong>Description:</strong> @eventDetails.EventDescription</p>
+                <hr />
+            </div>
+        }
+        else
+        {
+            <p>No event selected.</p>
+        }
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
