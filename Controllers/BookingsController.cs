@@ -61,6 +61,8 @@ namespace EventEase.Controllers
                 {
                     // Pass event details to the view
                     ViewBag.EventDetails = eventDetails;
+                    ViewBag.EventStartDate = eventDetails?.StartEventDate?.ToString("yyyy-MM-dd");
+                    ViewBag.EventEndDate = eventDetails?.FinishEventDate?.ToString("yyyy-MM-dd");
                 }
             }
 

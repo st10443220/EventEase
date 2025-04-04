@@ -9,14 +9,27 @@
 body {
     background-color: var(--cream);
     color: var(--navy);
-    min-height: 100vh;
     display: flex;
     flex-direction: column;
 }
 
+.table, thead, tbody, td {
+    background-color: var(--cream) !important;
+}
+
+tbody > tr > td, th {
+    vertical-align: middle;
+    text-align: center;
+}
+
+th {
+    background-color: var(--navy) !important;
+    color: var(--cream) !important;
+}
+
 .navbar {
     background-color: var(--navy) !important;
-    border-bottom: 3px solid var(--sage);
+    border-bottom: 3px solid var(--navy);
 }
 
 .navbar-brand, .nav-link {
@@ -29,13 +42,13 @@ body {
     color: white;
 }
 
-.btn-primary:hover {
-    background-color: var(--sage)
-}
+    .btn-primary:hover {
+        background-color: var(--navy)
+    }
 
 .btn-secondary {
-    background-color: var(--sage);
-    border-color: var(--sage);
+    background-color: var(--navy);
+    border-color: var(--navy);
     color: white;
 }
 
@@ -57,7 +70,7 @@ body {
     }
 
 .form-control:focus {
-    border-color: var(--sage);
+    border-color: var(--navy);
     box-shadow: 0 0 0 0.2rem rgba(129, 178, 154, 0.25);
 }
 
@@ -66,9 +79,9 @@ a {
     text-decoration: none;
 }
 
-a:hover {
-    color: var(--sage);
-}
+    a:hover {
+        color: var(--navy);
+    }
 
 .footer {
     background-color: var(--navy);
@@ -77,14 +90,14 @@ a:hover {
 }
 
 .hero-section {
-    background: linear-gradient(45deg, var(--peach), var(--cream));
+    background: linear-gradient(45deg, var(--coral), var(--peach), var(--cream));
     padding: 4rem 0;
     border-radius: 0 0 2rem 2rem;
 }
 
 .feature-card {
     background: white;
-    border: 2px solid var(--sage);
+    border: 2px solid var(--navy);
     border-radius: 1rem;
     padding: 2rem;
     margin: 1rem;

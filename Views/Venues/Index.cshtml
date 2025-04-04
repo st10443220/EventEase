@@ -42,7 +42,7 @@
                 @Html.DisplayFor(modelItem => item.VenueCapacity)
             </td>
             <td>
-                <img src="@Html.DisplayFor(modelItem => item.VenueImageUrl)" />
+                <img src="@Html.DisplayFor(modelItem => item.VenueImageUrl)" style="width: 200px; height: 120px"/>
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.VenueId">Edit</a> |
