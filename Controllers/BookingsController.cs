@@ -45,21 +45,14 @@ namespace EventEase.Controllers
         // GET: Bookings/Create
         public IActionResult Create(int? eventId)
         {
-            // Fetch the list of events for the dropdown
             ViewData["EventId"] = new SelectList(_context.Events, "EventId", "EventName");
-
-            // Fetch the list of venues for the dropdown
             ViewData["VenueId"] = new SelectList(_context.Venues, "VenueId", "VenueName");
 
-            // Fetch event details if an EventId is provided
             if (eventId.HasValue)
             {
-                var eventDetails = _context.Events
-                    .FirstOrDefault(e => e.EventId == eventId);
-
+                var eventDetails = _context.Events.FirstOrDefault(e => e.EventId == eventId);
                 if (eventDetails != null)
                 {
-                    // Pass event details to the view
                     ViewBag.EventDetails = eventDetails;
                     ViewBag.EventStartDate = eventDetails?.StartEventDate?.ToString("yyyy-MM-dd");
                     ViewBag.EventEndDate = eventDetails?.FinishEventDate?.ToString("yyyy-MM-dd");
@@ -70,13 +63,10 @@ namespace EventEase.Controllers
         }
 
         // POST: Bookings/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("BookingId,StartBookingDate,EndBookingDate,EventId,VenueId")] Booking booking)
         {
-            // Fetch the associated event
             var eventDetails = await _context.Events.FindAsync(booking.EventId);
 
             if (eventDetails == null)
@@ -85,7 +75,6 @@ namespace EventEase.Controllers
                 return View(booking);
             }
 
-            // Validate booking dates against event dates
             if (booking.StartBookingDate < eventDetails.StartEventDate || booking.StartBookingDate > eventDetails.FinishEventDate)
             {
                 ModelState.AddModelError("StartBookingDate", "Start Booking Date must be within the event's date range.");
@@ -101,6 +90,18 @@ namespace EventEase.Controllers
                 ModelState.AddModelError("", "End Booking Date cannot be before Start Booking Date.");
             }
 
+            bool isVenueOverlapping = await _context.Bookings
+                .AnyAsync(b => b.VenueId == booking.VenueId &&
+                               b.EventId == booking.EventId &&
+                               ((booking.StartBookingDate >= b.StartBookingDate && booking.StartBookingDate <= b.EndBookingDate) ||
+                                (booking.EndBookingDate >= b.StartBookingDate && booking.EndBookingDate <= b.EndBookingDate) ||
+                                (booking.StartBookingDate <= b.StartBookingDate && booking.EndBookingDate >= b.EndBookingDate)));
+
+            if (isVenueOverlapping)
+            {
+                ModelState.AddModelError("", "This venue already has an overlapping booking for this event.");
+            }
+
             if (ModelState.IsValid)
             {
                 _context.Add(booking);
@@ -108,7 +109,6 @@ namespace EventEase.Controllers
                 return RedirectToAction(nameof(Index));
             }
 
-            // Repopulate dropdowns if validation fails
             ViewData["EventId"] = new SelectList(_context.Events, "EventId", "EventName", booking.EventId);
             ViewData["VenueId"] = new SelectList(_context.Venues, "VenueId", "VenueName", booking.VenueId);
             return View(booking);
@@ -127,27 +127,20 @@ namespace EventEase.Controllers
             {
                 return NotFound();
             }
+
             ViewData["EventId"] = new SelectList(_context.Events, "EventId", "EventName", booking.EventId);
             ViewData["VenueId"] = new SelectList(_context.Venues, "VenueId", "VenueName", booking.VenueId);
 
-            if (id.HasValue)
+            var eventDetails = await _context.Events.FirstOrDefaultAsync(e => e.EventId == booking.EventId);
+            if (eventDetails != null)
             {
-                var eventDetails = _context.Events
-                    .FirstOrDefault(e => e.EventId == id);
-
-                if (eventDetails != null)
-                {
-                    // Pass event details to the view
-                    ViewBag.EventDetails = eventDetails;
-                }
+                ViewBag.EventDetails = eventDetails;
             }
 
             return View(booking);
         }
 
         // POST: Bookings/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("BookingId,StartBookingDate,EndBookingDate,EventId,VenueId")] Booking booking)
@@ -157,7 +150,6 @@ namespace EventEase.Controllers
                 return NotFound();
             }
 
-            // Fetch the associated event
             var eventDetails = await _context.Events.FindAsync(booking.EventId);
 
             if (eventDetails == null)
@@ -166,7 +158,6 @@ namespace EventEase.Controllers
                 return View(booking);
             }
 
-            // Validate booking dates against event dates
             if (booking.StartBookingDate < eventDetails.StartEventDate || booking.StartBookingDate > eventDetails.FinishEventDate)
             {
                 ModelState.AddModelError("StartBookingDate", "Start Booking Date must be within the event's date range.");
@@ -180,6 +171,19 @@ namespace EventEase.Controllers
             if (booking.EndBookingDate < booking.StartBookingDate)
             {
                 ModelState.AddModelError("", "End Booking Date cannot be before Start Booking Date.");
+            }
+
+            bool isVenueOverlapping = await _context.Bookings
+                .AnyAsync(b => b.VenueId == booking.VenueId &&
+                               b.EventId == booking.EventId &&
+                               b.BookingId != booking.BookingId &&
+                               ((booking.StartBookingDate >= b.StartBookingDate && booking.StartBookingDate <= b.EndBookingDate) ||
+                                (booking.EndBookingDate >= b.StartBookingDate && booking.EndBookingDate <= b.EndBookingDate) ||
+                                (booking.StartBookingDate <= b.StartBookingDate && booking.EndBookingDate >= b.EndBookingDate)));
+
+            if (isVenueOverlapping)
+            {
+                ModelState.AddModelError("", "This venue already has an overlapping booking for this event.");
             }
 
             if (ModelState.IsValid)
@@ -203,7 +207,6 @@ namespace EventEase.Controllers
                 return RedirectToAction(nameof(Index));
             }
 
-            // Repopulate dropdowns if validation fails
             ViewData["EventId"] = new SelectList(_context.Events, "EventId", "EventName", booking.EventId);
             ViewData["VenueId"] = new SelectList(_context.Venues, "VenueId", "VenueName", booking.VenueId);
             return View(booking);
@@ -242,6 +245,27 @@ namespace EventEase.Controllers
 
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
+        }
+
+        // GET: Bookings/Filter
+        public IActionResult Filter()
+        {
+            return View();
+        }
+
+        public async Task<IActionResult> FilterResults(string searchTerm)
+        {
+            var bookingsQuery = _context.Bookings.Include(b => b.Event).Include(b => b.Venue).AsQueryable();
+
+            if (!string.IsNullOrEmpty(searchTerm))
+            {
+                bookingsQuery = bookingsQuery.Where(b => b.BookingId.ToString().Contains(searchTerm)
+                                                      || b.Event.EventName.Contains(searchTerm)
+                                                      || b.Venue.VenueName.Contains(searchTerm));
+            }
+
+            var filteredBookings = await bookingsQuery.ToListAsync();
+            return View("Filter", filteredBookings);
         }
 
         private bool BookingExists(int id)

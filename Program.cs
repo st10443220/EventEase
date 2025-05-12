@@ -1,4 +1,5 @@
 using EventEase.Data;
+using EventEase.Services;
 using Microsoft.EntityFrameworkCore;
 
 namespace EventEase
@@ -11,31 +12,38 @@ namespace EventEase
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();
+            builder.Services.AddScoped<IBlobService, BlobService>(); // Use Scoped for safer DI behavior
 
-            // Add DbContext to the services container
+            // Configure EF Core with SQL Server
             builder.Services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"))); // Use your preferred DB provider
+                options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+            builder.Logging.AddDebug();
+            builder.Logging.AddConsole();
 
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
-            if (!app.Environment.IsDevelopment())
+            if (app.Environment.IsDevelopment())
+            {
+                app.UseDeveloperExceptionPage();
+            }
+            else
             {
                 app.UseExceptionHandler("/Home/Error");
-                // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
 
             app.UseHttpsRedirection();
+            app.UseStaticFiles(); // Serve wwwroot assets (CSS, JS, uploaded images, etc.)
+
             app.UseRouting();
 
             app.UseAuthorization();
 
-            app.MapStaticAssets();
             app.MapControllerRoute(
                 name: "default",
-                pattern: "{controller=Home}/{action=Index}/{id?}")
-                .WithStaticAssets();
+                pattern: "{controller=Home}/{action=Index}/{id?}");
 
             app.Run();
         }

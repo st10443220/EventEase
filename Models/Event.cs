@@ -6,10 +6,13 @@ namespace EventEase.Models
     {
         [Key]
         public int EventId { get; set; }
+        [Required]
         public string? EventName { get; set; }
+        [Required]
         public DateOnly? StartEventDate { get; set; }
+        [Required]
         public DateOnly? FinishEventDate { get; set; }
-
+        [Required]
         public string? EventDescription { get; set; }
 
         // One Event can have many Bookings

@@ -12,7 +12,7 @@
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="Create">
+        <form asp-action="Create" enctype="multipart/form-data">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="VenueName" class="control-label">Venue Name</label>
@@ -30,10 +30,11 @@
                 <span asp-validation-for="VenueCapacity" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="VenueImageUrl" class="control-label">Venue Image Url</label>
-                <input asp-for="VenueImageUrl" class="form-control" value="https://placehold.co/160x100" />
-                <span asp-validation-for="VenueImageUrl" class="text-danger"></span>
+                <label asp-for="ImageUpload">Select image:</label>
+                <input asp-for="ImageUpload" type="file" class="form-control" accept="image/*" />
+                <span asp-validation-for="ImageUpload" class="text-danger"></span>
             </div>
+
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" style="margin-top: 10px" />
             </div>

@@ -11,7 +11,7 @@
 <h4>Booking</h4>
 <hr />
 <div class="row">
-    <div class="class=form-card p-4 mt-4" style="background: white; border-radius: 1rem; border: 2px solid var(--sage);" >
+    <div class="col-md-4">
         <!-- Form to handle Booking creation -->
         <form asp-action="Create" method="post">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
@@ -38,24 +38,6 @@
                 <input type="submit" value="Create" class="btn btn-primary" style="margin-top: 10px" />
             </div>
         </form>
-    </div>
-    <div class="col-md-4">
-        <h4>Event Details</h4>
-        @if (ViewBag.EventDetails != null)
-        {
-            var eventDetails = ViewBag.EventDetails as EventEase.Models.Event;
-            <div>
-                <p><strong>Event Name:</strong> @eventDetails.EventName</p>
-                <p><strong>Start Date:</strong> @eventDetails.StartEventDate?.ToShortDateString()</p>
-                <p><strong>End Date:</strong> @eventDetails.FinishEventDate?.ToShortDateString()</p>
-                <p><strong>Description:</strong> @eventDetails.EventDescription</p>
-                <hr />
-            </div>
-        }
-        else
-        {
-            <p>No event selected.</p>
-        }
     </div>
 </div>
 

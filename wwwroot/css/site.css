@@ -107,3 +107,73 @@ a {
 .feature-card:hover {
     transform: translateY(-5px);
 }
+
+.filterInputText {
+    width: 300px;
+    padding: 0.5rem;
+    border-radius: 8px;
+    font-size: 1rem;
+    margin-right: 0.5rem;
+    background-color: var(--cream);
+    color: var(--navy);
+    transition: border-color 0.3s ease;
+    outline: none;
+    border: 2px solid transparent;
+}
+
+    .filterInputText:focus {
+        border: 2px solid var(--coral);
+    }
+    .filterInputText:hover {
+        border: 2px solid var(--coral);
+    }
+
+/* Styling the search button */
+.filterSearchButton {
+    background-color: var(--coral);
+    color: white;
+    padding: 0.5rem 1rem;
+    font-size: 1rem;
+    border-radius: 8px;
+    cursor: pointer;
+    border: none;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+    .filterSearchButton:hover {
+        background-color: var(--navy);
+        transform: translateY(-2px);
+    }
+
+    .filterSearchButton:focus {
+        outline: none;
+    }
+
+.filterTable {
+    margin-top: 10px;
+}
+
+
+.text-danger > ul {
+    list-style-type: none !important;
+    padding: 0;
+    margin: 0;
+    font-size: 1rem;
+    background-color: rgba(255, 0, 0, 0.1);
+    border: 1px solid var(--coral);
+    border-radius: 8px;
+    padding: 1rem;
+    margin-bottom: 1rem;
+}
+    .text-danger li {
+        color: var(--coral);
+        padding: 0.5rem 0;
+    }
+
+    .text-danger li:hover {
+        color: var(--navy); 
+    }
+
+    .text-danger:empty {
+        display: none;
+    }
