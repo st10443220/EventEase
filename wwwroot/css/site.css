@@ -6,21 +6,27 @@
     --peach: #f2cc8f;
 }
 
+::selection {
+    background: var(--sage);
+}
+
 body {
     background-color: var(--cream);
     color: var(--navy);
     display: flex;
     flex-direction: column;
+    justify-content: space-between;
+    height: 100vh;
 }
 
 .table, thead, tbody, td {
     background-color: var(--cream) !important;
 }
 
-tbody > tr > td, th {
-    vertical-align: middle;
-    text-align: center;
-}
+    tbody > tr > td, th {
+        vertical-align: middle;
+        text-align: center;
+    }
 
 th {
     background-color: var(--navy) !important;
@@ -84,15 +90,15 @@ a {
     }
 
 .footer {
+    position: static !important;
     background-color: var(--navy);
     color: var(--cream);
-    margin-top: auto;
 }
 
 .hero-section {
     background: linear-gradient(45deg, var(--coral), var(--peach), var(--cream));
-    padding: 4rem 0;
-    border-radius: 0 0 2rem 2rem;
+    padding: 4rem;
+    border-radius: 2rem;
 }
 
 .feature-card {
@@ -104,9 +110,9 @@ a {
     transition: transform 0.3s ease;
 }
 
-.feature-card:hover {
-    transform: translateY(-5px);
-}
+    .feature-card:hover {
+        transform: translateY(-5px);
+    }
 
 .filterInputText {
     width: 300px;

@@ -248,10 +248,16 @@ namespace EventEase.Controllers
         }
 
         // GET: Bookings/Filter
-        public IActionResult Filter()
+        public async Task<IActionResult> Filter()
         {
-            return View();
+            var allBookings = await _context.Bookings
+                .Include(b => b.Event)
+                .Include(b => b.Venue)
+                .ToListAsync();
+
+            return View(allBookings);
         }
+
 
         public async Task<IActionResult> FilterResults(string searchTerm)
         {
