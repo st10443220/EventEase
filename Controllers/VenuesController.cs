@@ -178,23 +178,37 @@ namespace EventEase.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var venue = await _context.Venues.FindAsync(id);
+            var venue = await _context.Venues
+                .FirstOrDefaultAsync(m => m.VenueId == id);
 
             if (venue == null)
             {
                 return NotFound();
             }
 
-            bool hasPlays = await _context.Bookings.AnyAsync(g => g.VenueId == id);
+            bool hasBookings = await _context.Bookings.AnyAsync(g => g.VenueId == id);
 
-            if (hasPlays)
+            if (hasBookings)
             {
-                ModelState.AddModelError("", "Cannot delete the booking because there are existing records associated with it.");
-                return View(venue);
+                ModelState.AddModelError("", "Cannot delete the venue because there are existing bookings associated with it.");
+                return View("Delete", venue);
             }
 
+            if (!string.IsNullOrEmpty(venue.VenueImageUrl))
+            {
+                bool blobDeleted = await _blobService.DeleteAsync(venue.VenueImageUrl);
+                if (!blobDeleted)
+                {
+                    Console.WriteLine($"Failed to delete blob for venue {id}: {venue.VenueImageUrl}");
+                    TempData["Warning"] = "Venue deleted, but failed to delete associated image.";
+                }
+            }
+
+            // Delete the venue from the database
             _context.Venues.Remove(venue);
             await _context.SaveChangesAsync();
+
+            TempData["Message"] = "Venue deleted successfully.";
             return RedirectToAction(nameof(Index));
         }
 

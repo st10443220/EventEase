@@ -37,34 +37,35 @@ namespace EventEase.Services
         // Implement the DeleteAsync method
         public async Task<bool> DeleteAsync(string blobUrl)
         {
-            if (string.IsNullOrEmpty(blobUrl))
+            if (string.IsNullOrWhiteSpace(blobUrl))
             {
-                // Nothing to delete
-                return false;
+                return false; // Invalid input
             }
+
             try
             {
-                // Need to parse the filename from the URL
-                // The filename is the last segment of the URI path
-                Uri blobUri = new Uri(blobUrl);
-                string fileName = Path.GetFileName(blobUri.LocalPath);
-                if (string.IsNullOrEmpty(fileName))
+                // Parse the blob name from the URL
+                var blobUri = new Uri(blobUrl);
+                var blobName = Path.GetFileName(Uri.UnescapeDataString(blobUri.AbsolutePath));
+
+                if (string.IsNullOrEmpty(blobName))
                 {
-                    // Could not parse filename from URL
-                    // Log this situation if necessary
+                    // Log warning: Invalid blob name derived from URL
+                    Console.WriteLine($"Invalid blob name derived from URL: {blobUrl}");
                     return false;
                 }
-                BlobClient blobClient = _container.GetBlobClient(fileName);
+
+                // Get the BlobClient for the specified blob
+                BlobClient blobClient = _container.GetBlobClient(blobName);
+
                 // Delete the blob if it exists
-                // DeleteIfExistsAsync returns true if the blob existed and was deleted, false otherwise.
-                var result = await blobClient.DeleteIfExistsAsync();
-                return result.Value; // Return the boolean indicating success
+                var response = await blobClient.DeleteIfExistsAsync();
+                return response; // Returns true if deleted, false if blob didn't exist
             }
             catch (Exception ex)
             {
-                // Log the exception (using a proper logging framework is recommended)
+                // Log the error (use a proper logging framework like Serilog or Microsoft.Extensions.Logging)
                 Console.WriteLine($"Error deleting blob {blobUrl}: {ex.Message}");
-                // Depending on requirements, you might re-throw or just return false
                 return false;
             }
         }
